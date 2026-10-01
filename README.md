@@ -58,6 +58,21 @@
 - 若某个补丁文件**第一次**被写入 `customization:` 头部（或小狼毫升级导致版本号变长），`git status` 会脏一次；跑一下 `git add -A` 即恢复干净，且不会暂存任何内容。
 - 修改词库后按上游约定运行 `make -C others/script/ build`；提交信息使用 Conventional Commits。
 
+### 跟随上游更新（可选）
+
+上游雾凇拼音更新词库时，用 `others/script/update-from-upstream.ps1` 同步：
+
+```powershell
+pwsh -File others/script/update-from-upstream.ps1 -DryRun   # 先看会改什么，不改任何文件
+pwsh -File others/script/update-from-upstream.ps1 -Commit   # 应用并提交，然后 git push
+```
+
+- 只同步 Rime 读取的内容（方案、词库、词典、`others/` 资源）。**永远不会覆盖**：`README.md`、`AGENTS.md`、`.gitignore`、`custom_phrase.txt`，以及你独有的三个 `*.custom.yaml` 补丁、`lua/dict_comment_filter.lua`、`opencc/cedict.*`。
+- 用 `--depth=1` 只抓上游最新一次提交（约 40 MB；上游完整历史约 247 MB）。远端 `upstream` 是本机 git 配置、**不随仓库分发**，脚本会自动补上。
+- 同步后**不需要** `make build`（上游提交的词库已经是排序去重后的结果），重新部署一次即可。
+- 同步会覆盖 `cn_dicts/`、`en_dicts/`、`*.schema.yaml`、`default.yaml`、`weasel.yaml` 等被手改过的上游文件 —— 想保留就先提交，同步后用 `git diff` 复查。
+- 脚本要求工作区干净（已跟踪文件无未提交改动），否则会直接退出，避免把同步和你的改动混在一起。
+
 ---
 
 # 雾凇拼音
