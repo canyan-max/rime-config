@@ -8,14 +8,9 @@ sync/
 *.userdb/
 installation.yaml
 user.yaml
-*.custom.yaml
-!others/**/*.custom.yaml
-
-# 本仓库是个人配置备份仓库：上面按上游约定忽略了所有 .custom.yaml，
-# 这里把本机实际在用的三个补丁文件加回白名单（根目录，作用范围仅限本文件）。
-!/default.custom.yaml
-!/rime_ice.custom.yaml
-!/weasel.custom.yaml
+# 上游在这里用 `*.custom.yaml` 忽略用户补丁，只保留 `!others/**/*.custom.yaml` 示例。
+# 本仓库是个人配置备份仓库，所有 .custom.yaml（含将来新建的补丁）都要入库，
+# 因此不设该忽略规则，避免新写的补丁被静默排除。确需忽略某个补丁时在此单独加一行。
 
 custom_phrase_double.txt
 others/script/scel2txt/out/*
