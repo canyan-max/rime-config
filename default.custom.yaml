@@ -1,0 +1,81 @@
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.17.4
+  generator: "Rime::SwitcherSettings"
+  modified_time: "Thu Oct  1 15:21:10 2026"
+  rime_version: 1.13.1
+patch:
+  schema_list:
+    - {schema: rime_ice}
+
+  # ─────────── 标点符号：全部使用半角（英文样式） ───────────
+  # 问题根源：rime-ice 的 default.yaml 把中文标点写进了 half_shape（半角）里，
+  # 例如 ',' : '，'、'.' : '。'、'?' : '？'，所以「半角」开关管不到它们，
+  # 打出来的仍是全角中文标点。
+  #
+  # 下面覆盖 punctuator 的两套映射，全部改为 ASCII。
+  # 注意：punctuator 下的字典是「合并」而非替换，未列出的键沿用原值。
+  punctuator:
+    # 半角状态（默认状态，switches/@4/reset: 0 已设为半角）
+    half_shape:
+      ' ' : { commit: ' ' }
+      ',' : { commit: ',' }
+      '.' : { commit: '.' }
+      '?' : { commit: '?' }
+      ';' : { commit: ';' }
+      ':' : { commit: ':' }
+      '!' : { commit: '!' }
+      '<' : { commit: '<' }
+      '>' : { commit: '>' }
+      '(' : { commit: '(' }
+      ')' : { commit: ')' }
+      '[' : { commit: '[' }
+      ']' : { commit: ']' }
+      '{' : { commit: '{' }
+      '}' : { commit: '}' }
+      '\' : { commit: '\' }      # 反斜杠键原本输出顿号「、」
+      '`' : { commit: '`' }      # 反引号键原本输出间隔号「·」
+      '$' : { commit: '$' }      # 原本输出「¥」
+      '^' : { commit: '^' }      # 原本输出省略号「……」
+      '_' : { commit: '_' }      # 原本输出破折号「——」
+      "'" : { commit: "'" }      # 原本是弯引号对 ‘ ’
+      '"' : { commit: '"' }      # 原本是弯引号对 “ ”
+
+    # 全角状态（若你用 Ctrl+Shift+5 切换到全角，也输出半角标点，保持一致）
+    full_shape:
+      ' ' : { commit: ' ' }
+      ',' : { commit: ',' }
+      '.' : { commit: '.' }
+      '?' : { commit: '?' }
+      ';' : { commit: ';' }
+      ':' : { commit: ':' }
+      '!' : { commit: '!' }
+      '<' : { commit: '<' }
+      '>' : { commit: '>' }
+      '(' : { commit: '(' }
+      ')' : { commit: ')' }
+      '[' : { commit: '[' }
+      ']' : { commit: ']' }
+      '{' : { commit: '{' }
+      '}' : { commit: '}' }
+      '\' : { commit: '\' }
+      '`' : { commit: '`' }
+      '$' : { commit: '$' }
+      '^' : { commit: '^' }
+      '_' : { commit: '_' }
+      "'" : { commit: "'" }
+      '"' : { commit: '"' }
+      # 全角专属键位，原本输出中文标点，一并改为半角
+      '|' : { commit: '|' }
+      '~' : { commit: '~' }
+      '@' : { commit: '@' }
+      '#' : { commit: '#' }
+      '%' : { commit: '%' }
+      '&' : { commit: '&' }
+      '*' : { commit: '*' }
+      '-' : { commit: '-' }
+      '+' : { commit: '+' }
+      '=' : { commit: '=' }
+
+  # 需要中文标点的场合（如顿号、书名号）：
+  #   按 v 进入符号模式，可输入 、《》「」【】——…… 等

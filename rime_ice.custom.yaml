@@ -1,0 +1,71 @@
+# 雾凇拼音 输入方案定制（自定义补丁文件）
+# 这是 rime_ice.schema.yaml 的补丁文件，改动不会被升级覆盖。
+# 修改后需要「重新部署」才生效：
+#   & "D:\Soft\21_rimer_app\weasel-0.17.4\WeaselDeployer.exe" /deploy
+#
+# 参考：Rime 定制指南
+# <https://github.com/rime/home/wiki/CustomizationGuide#一例默認英文輸出>
+
+patch:
+  # ─────────── 默认英文输出 ───────────
+  # 初始为 ASCII 模式（状态 1 = 「Ａ」）
+  # switches 列表第 0 个元素就是 ascii_mode 开关，把它的 reset 设为 1。
+  # reset 的作用：切换到本方案时重设为指定状态，而不是沿用上一个方案的状态。
+  # 想改回默认中文：把 1 改成 0。
+  "switches/@0/reset": 1
+
+  # 关闭 Emoji 表情候选：默认不输出 😄 这类表情
+  #   emoji 开关位于 switches 第 3 个元素（从 0 数起），原值 reset: 1（默认开）
+  #   设为 0 后，输入 biaoqing 不会再出现表情候选
+  #   想临时用表情：Ctrl+` 打开方案选单，把 💀→😄 切换回来
+  #   想彻底删掉这个开关（连方案选单里的那一项也不要）：
+  #     filters/@4: null
+  #     filters/@3: null
+  #   想恢复表情：把下面的 0 改成 1，或直接删掉这一行
+  "switches/@3/reset": 0
+
+  # 默认半角标点：full_shape 开关位于 switches 第 4 个元素（states: [ 半角, 全角 ]）
+  #   reset: 0 = 半角（ASCII 标点）；reset: 1 = 全角
+  #   配合 default.custom.yaml 里对 punctuator 两套映射的覆盖，
+  #   现在无论开关状态，标点都输出半角英文样式。
+  "switches/@4/reset": 0
+
+  # ─────────── 中英词典释义（候选旁显示英文） ───────────
+  # 新增一个开关，方案选单（F4）里显示为「译关 / 译开」
+  # 快捷键 Ctrl+Shift+E 切换
+  "switches/@next":
+    name: dict_comment
+    states: [ 译关, 译开 ]
+    reset: 1
+
+  # 追加释义滤镜到 filters 列表末尾。
+  #
+  # ⚠️ 重要教训：不要用 "engine/filters/@10" 这种写法！
+  #   实测 `@n` 是「替换第 n 项」而不是「插入」，用它会把原列表下标 10 的
+  #   `uniquifier`（候选去重滤镜）直接顶掉，导致简繁转换后的重复候选不再合并。
+  #   `/+` 是官方文档中「与列表合并」的语法，只会追加、不会破坏原有内容。
+  #
+  # 顺序说明：追加后排在最末，即 uniquifier 之后。
+  #   释义滤镜只读取候选文本、不依赖去重顺序，因此功能上等价，无需调整。
+  "engine/filters/+":
+    - lua_filter@*dict_comment_filter
+
+  # 词典释义滤镜的详细设置
+  dict_comment_filter:
+    enable_chinese_to_english: true    # 打中文时，候选旁显示英文释义（CC-CEDICT）
+    enable_english_to_chinese: false   # 打英文时显示中文释义：未安装 ecdict 词典，保持关闭
+    max_defs: 2                        # 释义最多显示几项，超出则用「…」省略
+    max_length: 45                     # 单条释义最大字符数，觉得候选框太宽就调小（如 25）
+    comment_prefix: " "                # 释义与候选词之间的分隔
+    comment_suffix: ""
+
+  # Ctrl+Shift+E 切换释义开关
+  "key_binder/bindings/@next":
+    when: always
+    accept: "Control+Shift+E"
+    toggle: dict_comment
+
+  # ─── 其他常用设定（按需取消注释）───
+  # "switches/@1/reset": 1        # 默认使用英文标点（ascii_punct）
+  # "switches/@2/reset": 1        # 默认繁体（traditionalization）
+  # "menu/page_size": 9           # 每页候选数，范围 1~9
