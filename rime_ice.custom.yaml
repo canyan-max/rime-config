@@ -123,4 +123,5 @@ patch:
 
   # ─── 其他常用设定（按需取消注释）───
   # "switches/@1/reset": 1        # 默认使用英文标点（ascii_punct）
-  # "menu/page_size": 9           # 每页候选数，范围 1~9
+  # 每页候选数（1~9）已在 default.custom.yaml 里设为 6；如需只对本方案另设，取消下面注释
+  # "menu/page_size": 6
