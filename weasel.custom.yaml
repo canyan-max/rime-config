@@ -80,15 +80,6 @@ patch:
   #   还要更挤：linespacing -60，candidate_spacing 0
   #   挤过头：linespacing -30，candidate_spacing 8
 
-  # ─────────── 托盘状态图标（反映真实的中/英状态）───────────
-  # Weasel 默认只靠 Windows 语言栏显示中英状态（任务栏那个「中 / Ａ」）。
-  # 但开机后、Rime 还没建立会话之前，语言栏会先显示「中」，敲下第一个键才变成 Ａ，
-  # 与 rime_ice.custom.yaml 里 ascii_mode 默认 Ａ 的设置对不上。
-  # 打开下面这个图标后，Rime 自己的托盘图标会反映真实状态，不再依赖语言栏的滞后。
-  # 注意：这只是多一个显示用的图标，不改变任何输入行为。
-  # 想关掉：改成 false，或整行删掉，然后重新部署。
-  style/display_tray_icon: true
-
   # ─── 在特定程序里强制英文模式（按需取消注释）───
   # 程序名一律用小写，含 .exe
   # app_options/pwsh.exe:
