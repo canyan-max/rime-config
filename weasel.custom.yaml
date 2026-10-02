@@ -80,12 +80,34 @@ patch:
   #   还要更挤：linespacing -60，candidate_spacing 0
   #   挤过头：linespacing -30，candidate_spacing 8
 
-  # ─── 在特定程序里强制英文模式（按需取消注释）───
-  # 程序名一律用小写，含 .exe
-  # app_options/pwsh.exe:
+  # ─────────── 在特定程序里强制英文模式 ───────────
+  # 程序名一律用小写、带 .exe（Weasel 0.15 及更早必须小写，新版本不区分大小写，统一小写最稳）。
+  # 作用：只在这些程序里默认英文，其它程序仍是中文默认。
+  # 想在这些程序里临时打中文：按 Shift / Ctrl+Space，或 F4 方案选单切到「中」。
+  # 写法说明：app_options/<程序名> 只改这一个程序，不会覆盖 base 里已有的其它程序配置。
+  app_options/code.exe:            # VS Code
+    ascii_mode: true
+  app_options/uv4.exe:             # Keil µVision 4
+    ascii_mode: true
+  app_options/pwsh.exe:            # PowerShell 7
+    ascii_mode: true
+  app_options/mintty.exe:          # Git Bash 的终端窗口（mintty）
+    ascii_mode: true
+  app_options/bash.exe:            # 在 conhost / 自建终端里直接跑 bash 时
+    ascii_mode: true
+
+  # 以下是按需启用（复制上面任意一段、去掉 # 即可）：
+  # app_options/powershell.exe:      # Windows PowerShell 5.1
+  #   ascii_mode: true
+  # app_options/windowsterminal.exe: # Windows Terminal 整窗口（Git Bash 若从它启动，实际生效的是这个）
+  #   ascii_mode: true
+  # app_options/wt.exe:
+  #   ascii_mode: true
+  # app_options/cmd.exe:
   #   ascii_mode: true
   # app_options/nvim-qt.exe:
   #   ascii_mode: true
-  #   vim_mode: true                         # vim 模式：Esc / Ctrl+C 自动回到英文
-  # app_options/mintty.exe:
-  #   ascii_mode: true
+  #   vim_mode: true                 # vim 模式：Esc / Ctrl+C 自动回到英文
+  # 编辑器里可加的小开关（加到上面某个程序下即可）：
+  #   vim_mode: true                 # Esc / Ctrl+C 自动切回英文
+
