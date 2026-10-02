@@ -5,50 +5,106 @@
 #
 # 参考：Rime 定制指南
 # <https://github.com/rime/home/wiki/CustomizationGuide#一例默認英文輸出>
+#
+# 写法说明：下面凡是「整表/整块」覆盖的地方，都写成完整内容，而不用 switches/@3 这种按下标改的写法。
+# 下标写法在增删条目后会错位（删掉一个开关，后面所有下标全部前移），整表覆盖更安全，
+# 而且一眼就能看出实际生效的是什么。
 
 patch:
-  # ─────────── 默认英文输出 ───────────
-  # 初始为 ASCII 模式（状态 1 = 「Ａ」）
-  # switches 列表第 0 个元素就是 ascii_mode 开关，把它的 reset 设为 1。
-  # reset 的作用：切换到本方案时重设为指定状态，而不是沿用上一个方案的状态。
-  # 想改回默认中文：把 1 改成 0。
-  "switches/@0/reset": 1
+  # ─────────── 方案开关（F4 方案选单里显示的就是这几个）───────────
+  # reset：切换到本方案时重置为指定状态；注释掉 reset 则沿用上次状态（切换窗口不重置）。
+  "switches":
+    - name: ascii_mode
+      states: [ 中, Ａ ]
+      reset: 1                    # 默认 ASCII 模式（Ａ）。想改回默认中文：把 1 改成 0
+    - name: ascii_punct
+      states: [ ¥, $ ]
+    - name: full_shape
+      states: [ 半角, 全角 ]
+      reset: 0                    # 默认半角；配合 default.custom.yaml 里对 punctuator 两套映射的覆盖
+    - name: dict_comment          # 本仓库新增：中英词典释义开关
+      states: [ 译关, 译开 ]
+      reset: 1
+  # 已移除的开关（F4 菜单里相应项也随之消失）：
+  #   traditionalization（简/繁）、emoji（💀/😄）、search_single_char（正常/单字）
 
-  # 关闭 Emoji 表情候选：默认不输出 😄 这类表情
-  #   emoji 开关位于 switches 第 3 个元素（从 0 数起），原值 reset: 1（默认开）
-  #   设为 0 后，输入 biaoqing 不会再出现表情候选
-  #   想临时用表情：Ctrl+` 打开方案选单，把 💀→😄 切换回来
-  #   想彻底删掉这个开关（连方案选单里的那一项也不要）：
-  #     filters/@4: null
-  #     filters/@3: null
-  #   想恢复表情：把下面的 0 改成 1，或直接删掉这一行
-  "switches/@3/reset": 0
+  # ─────────── 已关闭、用不上的扩展功能 ───────────
+  # 摘掉的都只是「引擎列表里的条目」，对应的文件（lua/*.lua、radical_pinyin.*、opencc/emoji*）
+  # 全部原样保留在仓库里。哪天想用回来，把下面注释里写的条目加回对应列表即可。
+  # 关闭清单：以词定字、部件拆字反查与辅码、简繁切换、Emoji。
 
-  # 默认半角标点：full_shape 开关位于 switches 第 4 个元素（states: [ 半角, 全角 ]）
-  #   reset: 0 = 半角（ASCII 标点）；reset: 1 = 全角
-  #   配合 default.custom.yaml 里对 punctuator 两套映射的覆盖，
-  #   现在无论开关状态，标点都输出半角英文样式。
-  "switches/@4/reset": 0
+  # 不再把部件拆字方案当作本方案的依赖。
+  # 效果：部署时不再编译 radical_pinyin.dict.yaml（约 2 MB 词典 / 5.5 MB 编译产物）。
+  "schema/dependencies":
+    - melt_eng        # 英文输入，作为次翻译器挂载到拼音方案
 
-  # ─────────── 中英词典释义（候选旁显示英文） ───────────
-  # 新增一个开关，方案选单（F4）里显示为「译关 / 译开」
-  # 快捷键 Ctrl+Shift+E 切换
-  "switches/@next":
-    name: dict_comment
-    states: [ 译关, 译开 ]
-    reset: 1
+  # 不再识别 u 开头的拆字反查。
+  # 去掉这条匹配规则后，u 开头的英文单词（use、url…）照常由英文词库出候选，只是不再触发拆字。
+  "recognizer":
+    import_preset: default                # 从 default.yaml 继承通用的
+    patterns:                             # 方案专有的匹配规则
+      punct: "^v([0-9]|10|[A-Za-z]+)$"    # 响应 symbols_v.yaml 的 symbols，用 v 替换 /
+      unicode: "^U[a-f0-9]+"              # 响应 lua_translator@*unicode
+      number: "^R[0-9]+[.]?[0-9]*"        # 响应 lua_translator@*number_translator，数字金额大写
+      calculator: "^cC.+"                 # 响应 lua_translator@*calc_translator，计算器
+      gregorian_to_lunar: "^N[0-9]{1,8}"  # 响应 lua_translator@*lunar，公历转农历
+      # 已移除：radical_lookup: "^uU[a-z]+$"
 
-  # 追加释义滤镜到 filters 列表末尾。
-  #
-  # ⚠️ 重要教训：不要用 "engine/filters/@10" 这种写法！
-  #   实测 `@n` 是「替换第 n 项」而不是「插入」，用它会把原列表下标 10 的
-  #   `uniquifier`（候选去重滤镜）直接顶掉，导致简繁转换后的重复候选不再合并。
-  #   `/+` 是官方文档中「与列表合并」的语法，只会追加、不会破坏原有内容。
-  #
-  # 顺序说明：追加后排在最末，即 uniquifier 之后。
-  #   释义滤镜只读取候选文本、不依赖去重顺序，因此功能上等价，无需调整。
-  "engine/filters/+":
-    - lua_filter@*dict_comment_filter
+  "engine/processors":
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+    # 已移除：lua_processor@*select_character（以词定字，[ ] 键上屏词中单个字）
+
+  "engine/segmentors":
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+    # 已移除：affix_segmentor@radical_lookup（部件拆字自定义 tag）
+
+  "engine/translators":
+    - punct_translator
+    - script_translator
+    - lua_translator@*date_translator    # 时间、日期、星期
+    - lua_translator@*lunar              # 农历
+    - lua_translator@*uuid               # UUID
+    - table_translator@custom_phrase     # 自定义短语 custom_phrase.txt
+    - table_translator@melt_eng          # 英文输入
+    - table_translator@cn_en             # 中英混合词汇
+    - lua_translator@*unicode            # Unicode
+    - lua_translator@*number_translator  # 数字、金额大写
+    - lua_translator@*calc_translator    # 计算器
+    - lua_translator@*force_gc           # 暴力 GC
+    # 已移除：table_translator@radical_lookup（部件拆字反查）
+
+  "engine/filters":
+    - lua_filter@*corrector                         # 错音错字提示
+    - lua_filter@*autocap_filter                    # 英文自动大写
+    - lua_filter@*v_filter                          # v 模式 symbols 优先
+    - lua_filter@*pin_cand_filter                   # 置顶候选项
+    - lua_filter@*long_word_filter                  # 长词优先
+    - lua_filter@*reduce_english_filter             # 降低部分英语单词在候选项的位置
+    - uniquifier                                    # 去重
+    - lua_filter@*dict_comment_filter               # 中英词典释义（候选旁显示英文）
+    # 已移除：reverse_lookup_filter@radical_reverse_lookup（部件拆字滤镜）
+    #         simplifier@emoji（Emoji）
+    #         simplifier@traditionalize（简繁切换）
+    #         lua_filter@*search@radical_pinyin（部件拆字辅码）
+
+  # ⚠️ 历史教训（保留备查）：不要用 "engine/filters/@10" 这种写法！
+  #   实测 `@n` 是「替换第 n 项」而不是「插入」，用它会把当时列表末尾的
+  #   `uniquifier`（候选去重滤镜）顶掉，导致重复候选不再合并。
+  #   `/+` 是「与列表合并」的语法，只会追加、不会破坏原有内容。
+  #   现在释义滤镜直接写在上面那份完整列表的末尾（uniquifier 之后），
+  #   好处是不依赖补丁内部的书写顺序：整表覆盖与 `/+` 追加若先后顺序颠倒，
+  #   追加的那一条会被整表覆盖顶掉，直接写进列表就没有这个隐患。
 
   # 词典释义滤镜的详细设置
   dict_comment_filter:
@@ -67,5 +123,4 @@ patch:
 
   # ─── 其他常用设定（按需取消注释）───
   # "switches/@1/reset": 1        # 默认使用英文标点（ascii_punct）
-  # "switches/@2/reset": 1        # 默认繁体（traditionalization）
   # "menu/page_size": 9           # 每页候选数，范围 1~9
