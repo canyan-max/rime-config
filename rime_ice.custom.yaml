@@ -16,7 +16,11 @@ patch:
   "switches":
     - name: ascii_mode
       states: [ 中, Ａ ]
-      reset: 1                    # 默认 ASCII 模式（Ａ）。想改回默认中文：把 1 改成 0
+      # 0 = 中（中文），1 = Ａ（ASCII / 英文）。
+      # 这里设为 0：开机后直接是中文，与任务栏指示器开机显示的「中」一致，
+      # 不会出现"指示器显示中、实际是英文，头几个字母打出来是英文"的错位。
+      # 想改回默认英文：把 0 改成 1。
+      reset: 0
     - name: ascii_punct
       states: [ ¥, $ ]
     - name: full_shape
