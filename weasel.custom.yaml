@@ -89,17 +89,17 @@ patch:
     ascii_mode: true
   app_options/uv4.exe:             # Keil µVision 4
     ascii_mode: true
-  app_options/pwsh.exe:            # PowerShell 7
+  app_options/windowsterminal.exe: # Windows Terminal —— 从它启动的程序，前台进程是它而不是子进程
+    ascii_mode: true               # 例：PowerShell 7 / Git Bash 若从 Windows Terminal 打开，靠这一条生效
+  app_options/pwsh.exe:            # PowerShell 7 独立窗口（不经 Windows Terminal 时）
     ascii_mode: true
-  app_options/mintty.exe:          # Git Bash 的终端窗口（mintty）
+  app_options/mintty.exe:          # Git Bash 自带的 mintty 窗口
     ascii_mode: true
   app_options/bash.exe:            # 在 conhost / 自建终端里直接跑 bash 时
     ascii_mode: true
 
   # 以下是按需启用（复制上面任意一段、去掉 # 即可）：
-  # app_options/powershell.exe:      # Windows PowerShell 5.1
-  #   ascii_mode: true
-  # app_options/windowsterminal.exe: # Windows Terminal 整窗口（Git Bash 若从它启动，实际生效的是这个）
+  # app_options/powershell.exe:      # Windows PowerShell 5.1（独立窗口）
   #   ascii_mode: true
   # app_options/wt.exe:
   #   ascii_mode: true
