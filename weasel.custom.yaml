@@ -97,6 +97,24 @@ patch:
     ascii_mode: true
   app_options/bash.exe:            # 在 conhost / 自建终端里直接跑 bash 时
     ascii_mode: true
+  app_options/jflash.exe:
+    ascii_mode: true
+  app_options/jscope.exe:
+    ascii_mode: true
+  app_options/jlinkrttviewer.exe:
+    ascii_mode: true
+  app_options/ozone.exe:
+    ascii_mode: true
+  app_options/sscomv5131.exe:
+    ascii_mode: true
+  app_options/dsview.exe:
+    ascii_mode: true
+  app_options/transcoding.exe:
+    ascii_mode: true
+  app_options/uedit64.exe:
+    ascii_mode: true
+  app_options/bcompare.exe:
+    ascii_mode: true
 
   # 以下是按需启用（复制上面任意一段、去掉 # 即可）：
   # app_options/powershell.exe:      # Windows PowerShell 5.1（独立窗口）
