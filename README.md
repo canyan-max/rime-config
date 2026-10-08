@@ -19,6 +19,18 @@
 | `opencc/cedict.json`、`cedict.txt`、`cedict.ocd2` | 上述滤镜用的 CC-CEDICT 词典。`cedict.json` 的 dict 类型是 `ocd2`，所以 `.ocd2` 必须一起提交 |
 | `custom_phrase.txt` | 自定义短语 |
 
+### 进制转换（中文模式）
+
+重新部署后，输入前缀加非负整数，选择候选即可输入转换结果：
+
+| 输入 | 转换结果示例 |
+| --- | --- |
+| `hexFF` | 十进制 `255`、二进制 `0b11111111` |
+| `dec255` | 十六进制 `0xFF`、二进制 `0b11111111` |
+| `bin1010` | 十进制 `10`、十六进制 `0xA` |
+
+前缀使用小写；十六进制数字的 A–F 大小写均可。只支持整数，最多 64 位，转换时不会损失大整数精度。功能由 `lua/base_converter.lua` 提供，在 `rime_ice.custom.yaml` 中接入。
+
 ### 在新机器上还原（Windows + 小狼毫便携版）
 
 1. 解压/安装**同版本**小狼毫（0.17.4）便携版，例如 `D:\Soft\21_rimer_app\weasel-0.17.4`。
