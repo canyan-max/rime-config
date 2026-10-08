@@ -6,6 +6,7 @@
 # 参考：Weasel 定制化 <https://github.com/rime/weasel/wiki/Weasel-定制化>
 
 patch:
+  style/color_scheme: purity_of_form_custom
   # 候选项竖向排列（从上到下一列的候选框）
   #   false = 竖向列表（当前设置）
   #   true  = 横向候选栏
@@ -13,11 +14,10 @@ patch:
 
   # ─── 字体与字号 ───
   # 注意单位是 pt（磅），1pt = 1.333px。
-  #   13pt ≈ 17.3px，比原来的 14pt(≈18.7px) 小一档；
-  #   你 VS Code 里设的 14 是 px，14px ≈ 10.5pt，所以 13pt 仍比编辑器正文略大，属正常。
-  style/font_point: 13
-  style/label_font_point: 13
-  style/comment_font_point: 10                                  # 英文释义比候选词小 3pt
+  # 候选文字、序号和英文释义统一使用 10pt（约 13.3px）。
+  style/font_point: 10
+  style/label_font_point: 10
+  style/comment_font_point: 10                                  # 英文释义与候选词字号一致
 
   # 字体名用本机实际注册的族名。
   # 原 weasel.yaml 写的是 "Microsoft YaHei"（不带 UI），但本机枚举不到该族名，
@@ -63,22 +63,19 @@ patch:
   #   英文释义 #CE9178 / #000000 .........  9.0:1 ✅✅（原 0x808080 仅 5.3:1 且偏灰闷）
   #   选中项文字 #FFFFFF / #333333 ....... 12.6:1 ✅✅
 
-  # ─────────── 行高与间距（压缩候选行高度）───────────
-  # linespacing：字号百分比，正值撑高、负值压缩。这是控制候选行高度的关键项。
-  #   0 = 默认；-20 = 行高压缩到约 80%；-45 = 压缩到约 55%（当前值）。
-  #   如果运行时出现字体上下跳动，把 style/layout/baseline 一起设成与 linespacing 相近的值。
-  style/layout/linespacing: -45
+  # ─────────── 行高与间距 ───────────
+  # 行高设为字号的 100%，文字采用默认居中对齐。
+  style/layout/linespacing: 100
+  style/layout/align_type: center
 
-  # candidate_spacing：候选项之间的间距（默认 22，偏大）。
-  style/layout/candidate_spacing: 2
+  # 高亮区域上下内边距，缩小每行留白。
+  style/layout/hilite_padding_y: 2
 
-  # margin_y：候选框整体的上下内边距（默认 8）。
+  # 候选项之间的间距。
+  style/layout/candidate_spacing: 5
+
+  # 候选框整体的上下内边距。
   style/layout/margin_y: 3
-
-  # ---- 微调备忘（按需改上面的数值，改完记得重新部署）----
-  #   想完全恢复默认：把上面三行注释掉
-  #   还要更挤：linespacing -60，candidate_spacing 0
-  #   挤过头：linespacing -30，candidate_spacing 8
 
   # ─────────── 在特定程序里强制英文模式 ───────────
   # 程序名一律用小写、带 .exe（Weasel 0.15 及更早必须小写，新版本不区分大小写，统一小写最稳）。
