@@ -53,6 +53,8 @@ patch:
       calculator: "^cC.+"                 # 响应 lua_translator@*calc_translator，计算器
       gregorian_to_lunar: "^N[0-9]{1,8}"  # 响应 lua_translator@*lunar，公历转农历
       base_conversion: "^(hex[0-9a-fA-F]+|dec[0-9]+|bin[01]+)$" # 进制转换
+      # 匹配逐键输入的中间状态，避免数字键提前选字；Lua 仅在 min/max 完整时输出。
+      numeric_limits: "^[ui](8|1(6)?|3(2)?|6(4)?)(m(a(x)?|i(n)?)?)?$"
       # 已移除：radical_lookup: "^uU[a-z]+$"
 
   "engine/processors":
@@ -87,6 +89,7 @@ patch:
     - lua_translator@*number_translator  # 数字、金额大写
     - lua_translator@*calc_translator    # 计算器
     - lua_translator@*base_converter     # 进制转换（最多 64 位整数）
+    - lua_translator@*numeric_limits     # 整数边界：十进制、十六进制、C 宏
     - lua_translator@*force_gc           # 暴力 GC
     # 已移除：table_translator@radical_lookup（部件拆字反查）
 
