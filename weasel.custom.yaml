@@ -14,10 +14,10 @@ patch:
 
   # ─── 字体与字号 ───
   # 注意单位是 pt（磅），1pt = 1.333px。
-  # 候选文字、序号和英文释义统一使用 10pt（约 13.3px）。
-  style/font_point: 10
-  style/label_font_point: 10
-  style/comment_font_point: 10                                  # 英文释义与候选词字号一致
+  # 候选文字、序号和英文释义统一使用 12pt（约 16px）。
+  style/font_point: 12
+  style/label_font_point: 12
+  style/comment_font_point: 12                                  # 英文释义与候选词字号一致
 
   # 字体名用本机实际注册的族名。
   # 原 weasel.yaml 写的是 "Microsoft YaHei"（不带 UI），但本机枚举不到该族名，
@@ -73,6 +73,9 @@ patch:
 
   # 候选项之间的间距。
   style/layout/candidate_spacing: 5
+
+  # 序号、候选文字和英文释义之间的横向间隔。
+  style/layout/hilite_spacing: 6
 
   # 候选框整体的上下内边距。
   style/layout/margin_y: 3
