@@ -6,6 +6,8 @@
 # 参考：Weasel 定制化 <https://github.com/rime/weasel/wiki/Weasel-定制化>
 
 patch:
+  # 隐藏中英文等状态切换提示，避免切换应用时弹出 A / 中 图标。
+  show_notifications: false
   style/color_scheme: purity_of_form_custom
   # 候选项竖向排列（从上到下一列的候选框）
   #   false = 竖向列表（当前设置）
