@@ -14,56 +14,28 @@ patch:
   #   true  = 横向候选栏
   style/horizontal: false
 
-  # ─── 字体与字号 ───
-  # 注意单位是 pt（磅），1pt = 1.333px。
-  # 候选文字、序号和英文释义统一使用 12pt（约 16px）。
-  style/font_point: 12
-  style/label_font_point: 12
-  style/comment_font_point: 12                                  # 英文释义与候选词字号一致
-
-  # 字体名用本机实际注册的族名。
-  # 原 weasel.yaml 写的是 "Microsoft YaHei"（不带 UI），但本机枚举不到该族名，
-  # 实际族名是 "Microsoft YaHei UI"（msyh.ttc 中注册）。改成正确的名字。
-  # font_face 是全局设定，中文和英文共用；注释字体一并统一，避免视觉不一致。
+  # 英文释义优先：英文 13pt，中文 11pt，序号 10pt。
+  style/font_point: 11
+  style/label_font_point: 10
+  style/comment_font_point: 13
   style/font_face: "Microsoft YaHei UI"
   style/label_font_face: "Microsoft YaHei UI"
   style/comment_font_face: "Microsoft YaHei UI"
 
-  # ─────────── VS Code Dark+ 配色（黑底版）───────────
-  # 直接改造现有的 purity_of_form_custom 皮肤（不新建皮肤，改动最小）。
-  # 配色方案自身的颜色优先级高于 style/，所以必须在这里覆盖，改 style/ 无效。
-  #
-  # ⚠️ 数值格式为 0xBBGGRR —— 【蓝色是第一字节】，不是常见的 0xRRGGBB，别搞反。
-  #    换算：想要 #RRGGBB，就写成 0xBBGGRR（把红蓝两字节对调）。
-  #    例如 #CE9178 → 0x7891CE
-
-  # 候选框背景与边框
-  "preset_color_schemes/purity_of_form_custom/back_color": 0x000000        # #000000 纯黑底
-  "preset_color_schemes/purity_of_form_custom/border_color": 0x3C3C3C      # #3C3C3C 深灰细边
-  "preset_color_schemes/purity_of_form_custom/shadow_color": 0xB4000000    # ARGB 半透明黑阴影
-
-  # 编码行（输入框里正在输入的那串字母）
-  "preset_color_schemes/purity_of_form_custom/text_color": 0xFEDC9C        # #9CDCFE 变量蓝
-  "preset_color_schemes/purity_of_form_custom/hilited_text_color": 0xFFFFFF # #FFFFFF
-
-  # 候选词：中文白色
-  "preset_color_schemes/purity_of_form_custom/candidate_text_color": 0xFFFFFF   # #FFFFFF 白
-  "preset_color_schemes/purity_of_form_custom/label_color": 0xC586C0            # #C586C0 关键字紫
-
-  # ★ 选中项高亮：黑底上用中性深灰，避免大面积蓝底压过白字
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_back_color": 0x333333    # #333333
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_border_color": 0x333333  # 与背景同色 → 无边框
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_text_color": 0xFFFFFF     # 白字
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_label_color": 0xFEDC9C   # #9CDCFE 变量蓝
-
-  # ★ 英文释义：橙色（VS Code 字符串色 #CE9178）
-  "preset_color_schemes/purity_of_form_custom/comment_text_color": 0x7891CE         # #CE9178 字符串橙
-  "preset_color_schemes/purity_of_form_custom/hilited_comment_text_color": 0x7891CE # 选中项同样是橙
-  #
-  # 对比度实测（WCAG 标准，正文需 ≥4.5:1）：
-  #   中文候选 #FFFFFF / #000000 ......... 21.0:1 ✅✅
-  #   英文释义 #CE9178 / #000000 .........  9.0:1 ✅✅（原 0x808080 仅 5.3:1 且偏灰闷）
-  #   选中项文字 #FFFFFF / #333333 ....... 12.6:1 ✅✅
+  # 深灰简洁配色；颜色格式是 0xBBGGRR。
+  "preset_color_schemes/purity_of_form_custom/back_color": 0x242120          # #202124
+  "preset_color_schemes/purity_of_form_custom/border_color": 0x48423C        # #3C4248
+  "preset_color_schemes/purity_of_form_custom/shadow_color": 0x40000000
+  "preset_color_schemes/purity_of_form_custom/text_color": 0xE8EAED          # #EDEAE8
+  "preset_color_schemes/purity_of_form_custom/hilited_text_color": 0xFFFFFF
+  "preset_color_schemes/purity_of_form_custom/candidate_text_color": 0xC8C0B8 # #B8C0C8
+  "preset_color_schemes/purity_of_form_custom/label_color": 0xA29A93         # #939AA2
+  "preset_color_schemes/purity_of_form_custom/comment_text_color": 0xF2F2F2 # 英文释义提亮
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_back_color": 0xA06332 # #3263A0
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_border_color": 0xA06332
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_text_color": 0xE5DAD0 # #D0DAE5
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_label_color": 0xE5DAD0 # #D0DAE5
+  "preset_color_schemes/purity_of_form_custom/hilited_comment_text_color": 0xFFFFFF
 
   # ─────────── 行高与间距 ───────────
   # 行高设为字号的 100%，文字采用默认居中对齐。

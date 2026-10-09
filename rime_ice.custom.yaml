@@ -119,8 +119,8 @@ patch:
   dict_comment_filter:
     enable_chinese_to_english: true    # 打中文时，候选旁显示英文释义（CC-CEDICT）
     enable_english_to_chinese: false   # 打英文时显示中文释义：未安装 ecdict 词典，保持关闭
-    max_defs: 2                        # 释义最多显示几项，超出则用「…」省略
-    max_length: 45                     # 单条释义最大字符数，觉得候选框太宽就调小（如 25）
+    max_defs: 1                        # 只显示第一条完整释义，避免多条含义撑宽候选框
+    max_length: 0                      # 0 表示不截断释义
     comment_prefix: " "                # 释义与候选词之间的分隔
     comment_suffix: ""
 

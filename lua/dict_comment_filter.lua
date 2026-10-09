@@ -69,7 +69,7 @@ local function format_by_count(def_str, max_defs, max_length, is_en_to_zh)
 
     if #items == 0 then
         result = def_str
-    elseif #items <= max_defs then
+    elseif max_defs <= 0 or #items <= max_defs then
         result = table.concat(items, is_en_to_zh and "；" or "; ")
     else
         local selected = {}
@@ -77,7 +77,7 @@ local function format_by_count(def_str, max_defs, max_length, is_en_to_zh)
             table.insert(selected, items[i])
         end
         result = table.concat(selected, is_en_to_zh and "；" or "; ")
-        has_more = true
+        -- 只展示前几项时不加省略号，避免被误认为当前释义被截断。
     end
 
     -- 字符长度安全兜底（使用标准 UTF-8 字符计数与截断）
@@ -131,9 +131,9 @@ function M.init(env)
     env.enable_e2c = config:get_bool(ns .. "/enable_english_to_chinese")
     if env.enable_e2c == nil then env.enable_e2c = true end
 
-    -- 释义显示项数（默认保留前 2 条释义）
+    -- 释义显示项数（默认保留前 2 条释义，0 表示全部显示）
     env.max_defs = config:get_int(ns .. "/max_defs") or 2
-    -- 最大字符长度安全兜底（默认 45 字符）
+    -- 最大字符长度安全兜底（默认 45 字符，0 表示不截断）
     env.max_length = config:get_int(ns .. "/max_length") or 45
 
     -- 释义前缀/后缀
