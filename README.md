@@ -6,14 +6,14 @@
 
 ### 这是什么
 
-本机在用的 Rime 用户目录快照（Windows + 小狼毫 Weasel 0.17.4 便携版），用来在新机器上还原成同一套输入体验。
+本机在用的 Rime 用户目录快照（Windows + 小狼毫 Weasel 0.17.0），用来在新机器上还原成同一套输入体验。仅保留雾凇全拼，支持中英文混输。
 
 ### 仓库独有、上游没有的文件
 
 | 文件 | 作用 |
 | --- | --- |
 | `default.custom.yaml` | 标点全部半角化，覆盖 `punctuator` 的 `half_shape` / `full_shape` 两套映射 |
-| `rime_ice.custom.yaml` | 默认 ASCII 输出、关闭 Emoji 候选、默认半角标点，并接入词典释义滤镜 |
+| `rime_ice.custom.yaml` | 默认中文、关闭 Emoji 候选、默认半角标点，并接入词典释义滤镜、进制转换和整数边界查询 |
 | `weasel.custom.yaml` | VS Code Dark+ 黑底配色、竖向候选、字号与行高压缩 |
 | `lua/dict_comment_filter.lua` | 候选旁显示 CC-CEDICT 中英释义的滤镜（<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> 开关） |
 | `opencc/cedict.json`、`cedict.txt`、`cedict.ocd2` | 上述滤镜用的 CC-CEDICT 词典。`cedict.json` 的 dict 类型是 `ocd2`，所以 `.ocd2` 必须一起提交 |
@@ -33,7 +33,7 @@
 
 ### 在新机器上还原（Windows + 小狼毫便携版）
 
-1. 解压/安装**同版本**小狼毫（0.17.4）便携版，例如 `D:\Soft\21_rimer_app\weasel-0.17.4`。
+1. 安装小狼毫（本仓库已在 0.17.0 上验证）；以下部署命令需在小狼毫安装目录执行。
 2. 指定用户目录。便携版就是靠这个注册表项找到用户目录的，不设则使用默认的 `%APPDATA%\Rime`：
    ```bat
    reg add "HKCU\SOFTWARE\Rime\Weasel" /v RimeUserDir /t REG_SZ /d "D:\Soft\21_rimer_app\my_rime_user" /f
@@ -56,6 +56,10 @@
    start_service.bat
    WeaselDeployer.exe /deploy
    ```
+
+正常使用无需安装 Go、make 或运行仓库的词库构建脚本；拉取配置后执行小狼毫「重新部署」即可。已有配置更新时，运行 `git pull` 后再次重新部署。
+
+中文模式下可输入 `u16max`、`i32min` 等查询 8/16/32/64 位整数边界；`us`、`ms`、`om` 分别提供 `μs`、`ms`、`Ω` 候选。资源管理器和配置中列出的开发工具默认 ASCII 模式，可按 Shift 临时切换中文。
 
 ### 不会随仓库一起还原的东西
 

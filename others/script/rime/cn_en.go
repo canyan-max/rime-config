@@ -549,13 +549,6 @@ func CnEn() {
 
 	schemas := []schema{
 		{name: "cn_en", desc: "全拼", combinationType: "unique", path: filepath.Join(RimeDir, "en_dicts/cn_en.txt")},
-		doublePinyin,
-		doublePinyinFlypy,
-		doublePinyinMSPY,
-		doublePinyinSogou,
-		doublePinyinZiGuang,
-		doublePinyinABC,
-		doublePinyinJiajia,
 	}
 
 	// 写入前缀内容

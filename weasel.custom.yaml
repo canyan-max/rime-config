@@ -87,6 +87,8 @@ patch:
   # 写法说明：app_options/<程序名> 只改这一个程序，不会覆盖 base 里已有的其它程序配置。
   app_options/code.exe:            # VS Code
     ascii_mode: true
+  app_options/explorer.exe:        # Windows 资源管理器：地址栏、搜索和文件重命名默认英文
+    ascii_mode: true
   app_options/uv4.exe:             # Keil µVision 4
     ascii_mode: true
   app_options/windowsterminal.exe: # Windows Terminal —— 从它启动的程序，前台进程是它而不是子进程
@@ -128,4 +130,3 @@ patch:
   #   vim_mode: true                 # vim 模式：Esc / Ctrl+C 自动回到英文
   # 编辑器里可加的小开关（加到上面某个程序下即可）：
   #   vim_mode: true                 # Esc / Ctrl+C 自动切回英文
-
