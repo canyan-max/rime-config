@@ -14,33 +14,39 @@ patch:
   #   true  = 横向候选栏
   style/horizontal: false
 
-  # 英文释义优先：英文 13pt，中文 11pt，序号 10pt。
-  style/font_point: 11
+  # 英文释义优先：英文 Segoe UI 12pt，中文微软雅黑 UI 9pt，序号 10pt。
+  style/font_point: 9
   style/label_font_point: 10
-  style/comment_font_point: 13
+  style/comment_font_point: 12
   style/font_face: "Microsoft YaHei UI"
   style/label_font_face: "Microsoft YaHei UI"
-  style/comment_font_face: "Microsoft YaHei UI"
+  style/comment_font_face: "Segoe UI, Microsoft YaHei UI"
 
-  # 深灰简洁配色；颜色格式是 0xBBGGRR。
-  "preset_color_schemes/purity_of_form_custom/back_color": 0x242120          # #202124
+  # 深灰简洁配色；颜色格式是 0xAABBGGRR，省略 AA 时不透明。
+  # 只让背景透底，文字保持不透明；CC / FF 为 80% 不透明。
+  "preset_color_schemes/purity_of_form_custom/back_color": 0xCC362A28        # #282A36 Dracula 背景，20% 透明
   "preset_color_schemes/purity_of_form_custom/border_color": 0x48423C        # #3C4248
   "preset_color_schemes/purity_of_form_custom/shadow_color": 0x40000000
   "preset_color_schemes/purity_of_form_custom/text_color": 0xE8EAED          # #EDEAE8
   "preset_color_schemes/purity_of_form_custom/hilited_text_color": 0xFFFFFF
   "preset_color_schemes/purity_of_form_custom/candidate_text_color": 0xC8C0B8 # #B8C0C8
   "preset_color_schemes/purity_of_form_custom/label_color": 0xA29A93         # #939AA2
-  "preset_color_schemes/purity_of_form_custom/comment_text_color": 0xF2F2F2 # 英文释义提亮
+  "preset_color_schemes/purity_of_form_custom/comment_text_color": 0xC679FF # #FF79C6 Dracula 粉色
   "preset_color_schemes/purity_of_form_custom/hilited_candidate_back_color": 0xA06332 # #3263A0
   "preset_color_schemes/purity_of_form_custom/hilited_candidate_border_color": 0xA06332
   "preset_color_schemes/purity_of_form_custom/hilited_candidate_text_color": 0xE5DAD0 # #D0DAE5
   "preset_color_schemes/purity_of_form_custom/hilited_candidate_label_color": 0xE5DAD0 # #D0DAE5
-  "preset_color_schemes/purity_of_form_custom/hilited_comment_text_color": 0xFFFFFF
+  "preset_color_schemes/purity_of_form_custom/hilited_comment_text_color": 0xF2F8F8 # #F8F8F2 Dracula 米白色
 
   # ─────────── 行高与间距 ───────────
-  # 行高设为字号的 100%，文字采用默认居中对齐。
+  # 行高设为字号的 100%，序号、中文与英文在每条候选行内垂直居中。
   style/layout/linespacing: 100
   style/layout/align_type: center
+
+  # 限制单个文本区域的宽度，长英文按完整单词换行，不截断释义。
+  # 整个候选框还包括序号、中文和边距；实际像素大小随系统缩放变化。
+  # 保留默认最小宽度，避免短释义前出现大块空白。
+  style/layout/max_width: 320
 
   # 高亮区域上下内边距，缩小每行留白。
   style/layout/hilite_padding_y: 2

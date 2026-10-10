@@ -4,13 +4,23 @@
 功能：
 1. 输入中文字词时，在候选词 comment 中显示对应英文释义（基于 CC-CEDICT 词典）。
 2. 输入英文单词时，在候选词 comment 中显示对应中文释义（基于 ECDICT 词典）。
-3. 释义数量限制（按释义项个数截断，如保留前 2 条释义，超出追加省略号“…”）。
+3. 日常简明提示：常见语法字优先展示核心用法，普通词保留完整短释义。
 4. 安全 UTF-8 分割：杜绝全角标点字节碰撞导致的汉字乱码（黑框问号）。
 5. 全局单例缓存（Singleton Cache）：多软件切换零延迟。
 6. 与现有候选 comment（错音错字提示、Emoji、拆字编码等）无缝共存。
 --]]
 
 local M = {}
+
+-- 日常学习提示，优先常用语法含义；原词典仍保留全部含义和其他读音。
+local brief_glosses = {
+    ["了"] = "completed action; change of state",
+    ["的"] = "possessive / attributive particle",
+    ["吗"] = "question particle",
+    ["呢"] = "question / continuation particle",
+    ["吧"] = "suggestion particle; n. bar",
+    ["啊"] = "int. ah; exclamation particle",
+}
 
 -- 全局单例缓存：避免每次切换应用/新建 Session 时重复解析大词典导致卡顿
 local global_ecdict = nil
@@ -48,14 +58,17 @@ local function is_chinese(s)
 end
 
 -- 按照释义项个数截断，安全处理 UTF-8 字符
-local function format_by_count(def_str, max_defs, max_length, is_en_to_zh)
+local function format_by_count(def_str, max_defs, max_length, is_en_to_zh, brief_length)
     if not def_str or def_str == "" then return "" end
 
     -- 统一先将 UTF-8 不换行空格 (\194\160) 替换为标准 ASCII 空格，杜绝 Lua 单字节字符类 [%s\194\160] 错切汉字末尾字节 (如“靠”、“帮”、“亮”、“象”等末字节 0xA0)
     local clean_def = def_str:gsub("\194\160", " ")
 
-    -- 将全角分号、逗号、顿号安全替换为单字节 ASCII 分号
-    local safe_str = clean_def:gsub("；", ";"):gsub("，", ";"):gsub("、", ";"):gsub(",", ";")
+    -- 英文逗号是解释的一部分，不能当作释义边界。
+    local safe_str = clean_def:gsub("；", ";")
+    if is_en_to_zh then
+        safe_str = safe_str:gsub("，", ";"):gsub("、", ";"):gsub(",", ";")
+    end
     local items = {}
     for item in safe_str:gmatch("([^;]+)") do
         local trimmed = item:match("^%s*(.-)%s*$") or ""
@@ -64,19 +77,24 @@ local function format_by_count(def_str, max_defs, max_length, is_en_to_zh)
         end
     end
 
-    local result = ""
+    local result
     local has_more = false
 
     if #items == 0 then
         result = def_str
-    elseif max_defs <= 0 or #items <= max_defs then
-        result = table.concat(items, is_en_to_zh and "；" or "; ")
     else
         local selected = {}
-        for i = 1, max_defs do
+        local separator = is_en_to_zh and "；" or "; "
+        local count = max_defs > 0 and math.min(max_defs, #items) or #items
+        for i = 1, count do
+            local combined = table.concat(selected, separator)
+            if #selected > 0 and brief_length and brief_length > 0
+                and (utf8.len(combined .. separator .. items[i]) or math.huge) > brief_length then
+                break
+            end
             table.insert(selected, items[i])
         end
-        result = table.concat(selected, is_en_to_zh and "；" or "; ")
+        result = table.concat(selected, separator)
         -- 只展示前几项时不加省略号，避免被误认为当前释义被截断。
     end
 
@@ -135,6 +153,8 @@ function M.init(env)
     env.max_defs = config:get_int(ns .. "/max_defs") or 2
     -- 最大字符长度安全兜底（默认 45 字符，0 表示不截断）
     env.max_length = config:get_int(ns .. "/max_length") or 45
+    -- 只限制后续完整释义的追加；第一条即使很长也不从中间截断。
+    env.brief_length = config:get_int(ns .. "/brief_length") or 40
 
     -- 释义前缀/后缀
     env.comment_prefix = config:get_string(ns .. "/comment_prefix") or " "
@@ -170,12 +190,13 @@ function M.func(input, env)
         elseif env.enable_c2e and env.cedict and is_chinese(text) then
             -- 中译英
             local clean_text = text:gsub("^%s+", ""):gsub("%s+$", "")
-            raw_def = lookup(env.cedict, clean_text)
+            raw_def = brief_glosses[clean_text] or lookup(env.cedict, clean_text)
             is_e2c = false
         end
 
         if raw_def and raw_def ~= "" then
-            local formatted_def = format_by_count(raw_def, env.max_defs, env.max_length, is_e2c)
+            local brief_length = not is_e2c and env.brief_length or nil
+            local formatted_def = format_by_count(raw_def, env.max_defs, env.max_length, is_e2c, brief_length)
             if formatted_def ~= "" then
                 local formatted = env.comment_prefix .. formatted_def .. env.comment_suffix
                 if cand.comment and cand.comment ~= "" then

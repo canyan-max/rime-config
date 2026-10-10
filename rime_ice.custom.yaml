@@ -22,10 +22,11 @@ patch:
       # 想改回默认英文：把 0 改成 1。
       reset: 0
     - name: ascii_punct
-      states: [ ¥, $ ]
+      states: [ 中文标点, 英文标点 ]
+      reset: 1                    # 默认仍用英文标点；Ctrl+Shift+3 可切换中文标点
     - name: full_shape
       states: [ 半角, 全角 ]
-      reset: 0                    # 默认半角；配合 default.custom.yaml 里对 punctuator 两套映射的覆盖
+      reset: 0                    # 默认半角字符；中文标点由 ascii_punct 独立控制
     - name: dict_comment          # 本仓库新增：中英词典释义开关
       states: [ 译关, 译开 ]
       reset: 1
@@ -119,8 +120,9 @@ patch:
   dict_comment_filter:
     enable_chinese_to_english: true    # 打中文时，候选旁显示英文释义（CC-CEDICT）
     enable_english_to_chinese: false   # 打英文时显示中文释义：未安装 ecdict 词典，保持关闭
-    max_defs: 1                        # 只显示第一条完整释义，避免多条含义撑宽候选框
+    max_defs: 2                        # 日常简明模式：最多显示两条完整短释义
     max_length: 0                      # 0 表示不截断释义
+    brief_length: 40                   # 合计超过此长度就不追加第二条，第一条始终完整
     comment_prefix: " "                # 释义与候选词之间的分隔
     comment_suffix: ""
 
