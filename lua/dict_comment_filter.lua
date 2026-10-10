@@ -25,7 +25,8 @@ local brief_glosses = {
 -- 全局单例缓存：避免每次切换应用/新建 Session 时重复解析大词典导致卡顿
 local global_ecdict = nil
 local global_cedict = nil
-local is_dict_loaded = false
+local is_ecdict_loaded = false
+local is_cedict_loaded = false
 
 local function load_opencc_dict(name)
     local ok, obj = pcall(Opencc, name)
@@ -35,11 +36,15 @@ local function load_opencc_dict(name)
     return nil
 end
 
-local function init_global_dicts()
-    if is_dict_loaded then return end
-    is_dict_loaded = true
-    global_ecdict = load_opencc_dict("ecdict.json")
-    global_cedict = load_opencc_dict("cedict.json")
+local function init_global_dicts(enable_c2e, enable_e2c)
+    if enable_e2c and not is_ecdict_loaded then
+        is_ecdict_loaded = true
+        global_ecdict = load_opencc_dict("ecdict.json")
+    end
+    if enable_c2e and not is_cedict_loaded then
+        is_cedict_loaded = true
+        global_cedict = load_opencc_dict("cedict.json")
+    end
 end
 
 local function is_english(s)
@@ -160,8 +165,8 @@ function M.init(env)
     env.comment_prefix = config:get_string(ns .. "/comment_prefix") or " "
     env.comment_suffix = config:get_string(ns .. "/comment_suffix") or ""
 
-    -- 确保全局单例字典已加载（仅在进程初次调用时加载一次）
-    init_global_dicts()
+    -- 只加载已启用方向的词典；各方向独立缓存，后续会话启用时仍可首次加载。
+    init_global_dicts(env.enable_c2e, env.enable_e2c)
     env.ecdict = global_ecdict
     env.cedict = global_cedict
 end
