@@ -14,8 +14,8 @@ patch:
   #   true  = 横向候选栏
   style/horizontal: false
 
-  # 英文释义优先：英文 Segoe UI 12pt，中文微软雅黑 UI 9pt，序号 10pt。
-  style/font_point: 9
+  # 英文释义优先：英文 Segoe UI 12pt，中文微软雅黑 UI 10pt，序号 10pt。
+  style/font_point: 10
   style/label_font_point: 10
   style/comment_font_point: 12
   style/font_face: "Microsoft YaHei UI"
