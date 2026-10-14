@@ -61,6 +61,7 @@ patch:
   "engine/processors":
     - ascii_composer
     - recognizer
+    - lua_processor@*base_converter_processor # 进制转换候选支持回车上屏
     - key_binder
     - speller
     - punctuator

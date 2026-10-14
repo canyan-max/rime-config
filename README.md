@@ -29,7 +29,7 @@
 | `dec255` | 十六进制 `0xFF`、二进制 `0b11111111` |
 | `bin1010` | 十进制 `10`、十六进制 `0xA` |
 
-前缀使用小写；十六进制数字的 A–F 大小写均可。只支持整数，最多 64 位，转换时不会损失大整数精度。功能由 `lua/base_converter.lua` 提供，在 `rime_ice.custom.yaml` 中接入。
+前缀使用小写；十六进制数字的 A–F 大小写均可。只支持整数，最多 64 位，转换时不会损失大整数精度。使用空格或回车可上屏当前候选。功能由 `lua/base_converter.lua` 和 `lua/base_converter_processor.lua` 提供，在 `rime_ice.custom.yaml` 中接入。
 
 ### 在新机器上还原（Windows + 小狼毫便携版）
 
