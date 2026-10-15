@@ -8,6 +8,16 @@ patch:
   # 配合 weasel.custom.yaml 中的字号与间距设置，每页显示 6 个候选。
   "menu/page_size": 6
 
+  # ─────────── 方案选单的开关记忆 ───────────
+  # 上游 default.yaml 的 switcher.save_options 会「记住」某些开关的状态（从 F4 选单切换时）。
+  # 但上游注释里明确写着：需要记忆的开关不能设定 reset —— 两者同时写会出现
+  # "有时记住、有时被打回默认"的不确定行为。
+  # 本方案的 4 个开关（ascii_mode / ascii_punct / full_shape / dict_comment）都设了 reset，
+  # 所以这里整个清空：所有开关一律按 reset 走，行为完全确定。
+  # （原列表里的 traditionalization / emoji / search_single_char 对应的开关早已移除，是死条目。）
+  # 想恢复某个开关的"记忆"：把它的 reset 删掉，再把名字加回下面的列表，例如 [ ascii_punct ]。
+  "switcher/save_options": []
+
   # ─────────── 标点符号：使用中文标点（全角样式）───────────
   # 不再覆盖 punctuator；关闭 ascii_punct 后，中文模式使用上游雾凇拼音的标点映射：
   #   半角状态： , → ，   . → 。   ? → ？   ! → ！   ; → ；   : → ：
