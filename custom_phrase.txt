@@ -25,5 +25,6 @@
 
 
 μs	us	100
+mA	ma	100
 ms	ms	100
 Ω	om	100
