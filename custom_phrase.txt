@@ -25,6 +25,10 @@
 
 
 μs	us	100
-mA	ma	100
+μV	uv	100
+μA	ua	100
+mA	maa	100
 ms	ms	100
+mV	mvv	100
+mΩ	moo	100
 Ω	om	100
