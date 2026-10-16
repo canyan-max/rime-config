@@ -62,6 +62,7 @@ patch:
     - ascii_composer
     - recognizer
     - lua_processor@*base_converter_processor # 进制转换候选支持回车上屏
+    - lua_processor@*calculator_processor     # 计算器回车上屏“表达式 = 结果”
     - key_binder
     - speller
     - punctuator
