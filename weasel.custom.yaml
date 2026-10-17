@@ -23,8 +23,8 @@ patch:
   style/comment_font_face: "Segoe UI, Microsoft YaHei UI"
 
   # 深灰底搭配橙色选中标记；颜色格式是 0xAABBGGRR，省略 AA 时不透明。
-  # 只让背景透底，文字保持不透明；CC 约为 80% 不透明，省略 AA 时完全不透明。
-  "preset_color_schemes/purity_of_form_custom/back_color": 0xCC262525        # #252526 深灰背景，20% 透明
+  # 背景和文字均保持完全不透明。
+  "preset_color_schemes/purity_of_form_custom/back_color": 0x262525          # #252526 深灰背景
   "preset_color_schemes/purity_of_form_custom/border_color": 0x3C3C3C        # #3C3C3C
   "preset_color_schemes/purity_of_form_custom/shadow_color": 0x40000000
   "preset_color_schemes/purity_of_form_custom/text_color": 0xD4D4D4          # #D4D4D4
