@@ -11,6 +11,10 @@
 # 而且一眼就能看出实际生效的是什么。
 
 patch:
+  # Windows 任务栏输入法状态图标：恢复默认白底样式；中文显示灰色「中」，英文显示同色系「A」。
+  "schema/icon": icons/rime-cn.ico
+  "schema/ascii_icon": icons/rime-ascii.ico
+
   # ─────────── 方案开关（F4 方案选单里显示的就是这几个）───────────
   # reset：切换到本方案时重置为指定状态；注释掉 reset 则沿用上次状态（切换窗口不重置）。
   "switches":
