@@ -14,30 +14,30 @@ patch:
   #   true  = 横向候选栏
   style/horizontal: false
 
-  # 英文释义优先：英文 Segoe UI 12pt，中文微软雅黑 UI 10pt，序号 10pt。
+  # 英文释义使用 Segoe UI 11pt，中文微软雅黑 UI 10pt，序号 10pt。
   style/font_point: 10
   style/label_font_point: 10
-  style/comment_font_point: 12
+  style/comment_font_point: 11
   style/font_face: "Microsoft YaHei UI"
   style/label_font_face: "Microsoft YaHei UI"
   style/comment_font_face: "Segoe UI, Microsoft YaHei UI"
 
-  # 深灰底搭配橙色选中标记；颜色格式是 0xAABBGGRR，省略 AA 时不透明。
+  # 浅雾蓝配色；颜色格式是 0xAABBGGRR，省略 AA 时不透明。
   # 背景和文字均保持完全不透明。
-  "preset_color_schemes/purity_of_form_custom/back_color": 0x262525          # #252526 深灰背景
-  "preset_color_schemes/purity_of_form_custom/border_color": 0x3C3C3C        # #3C3C3C
+  "preset_color_schemes/purity_of_form_custom/back_color": 0xFAF8F7          # #F7F8FA 浅冷灰背景
+  "preset_color_schemes/purity_of_form_custom/border_color": 0xEAE3DD        # #DDE3EA 浅灰蓝边框
   "preset_color_schemes/purity_of_form_custom/shadow_color": 0x40000000
-  "preset_color_schemes/purity_of_form_custom/text_color": 0xD4D4D4          # #D4D4D4
-  "preset_color_schemes/purity_of_form_custom/hilited_text_color": 0xE6F1FF  # #FFF1E6 暖白色
-  "preset_color_schemes/purity_of_form_custom/candidate_text_color": 0xD4D4D4 # #D4D4D4
-  "preset_color_schemes/purity_of_form_custom/label_color": 0x858585         # #858585
-  "preset_color_schemes/purity_of_form_custom/comment_text_color": 0x3D8AFF # #FF8A3D 亮橙色
-  "preset_color_schemes/purity_of_form_custom/hilited_mark_color": 0x3D8AFF # #FF8A3D 亮橙标记
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_back_color": 0x262D3A # #3A2D26 深棕色
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_border_color": 0x262D3A
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_text_color": 0xE6F1FF # #FFF1E6 暖白色
-  "preset_color_schemes/purity_of_form_custom/hilited_candidate_label_color": 0xE6F1FF # #FFF1E6 暖白色
-  "preset_color_schemes/purity_of_form_custom/hilited_comment_text_color": 0x3D8AFF # #FF8A3D 亮橙色
+  "preset_color_schemes/purity_of_form_custom/text_color": 0x2A2420          # #20242A 深灰黑
+  "preset_color_schemes/purity_of_form_custom/hilited_text_color": 0x2B2117  # #17212B 深蓝黑
+  "preset_color_schemes/purity_of_form_custom/candidate_text_color": 0x2A2420 # #20242A 中文候选
+  "preset_color_schemes/purity_of_form_custom/label_color": 0x85776B         # #6B7785 序号
+  "preset_color_schemes/purity_of_form_custom/comment_text_color": 0x9A8876  # #76889A 英文释义
+  "preset_color_schemes/purity_of_form_custom/hilited_mark_color": 0xC98A4C   # #4C8AC9 选中标记
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_back_color": 0xF7EADD # #DDEAF7 浅雾蓝选中背景
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_border_color": 0xF7EADD
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_text_color": 0x2B2117 # #17212B 选中候选
+  "preset_color_schemes/purity_of_form_custom/hilited_candidate_label_color": 0x946A35 # #356A94 选中序号
+  "preset_color_schemes/purity_of_form_custom/hilited_comment_text_color": 0x946A35 # #356A94 选中释义
 
   # ─────────── 行高与间距 ───────────
   # 行高设为字号的 100%，序号、中文与英文在每条候选行内垂直居中。
