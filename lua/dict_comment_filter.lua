@@ -142,6 +142,32 @@ local function lookup(opencc_obj, key)
     return nil
 end
 
+-- 若释义以当前完整输入码的音译开头，则去掉重复的音译说明。
+-- 例如输入 sihu、候选为「四胡」时：
+--   sihu (or "khuurchir" in Mongolian), a bowed instrument ...
+-- 会简化为：
+--   a bowed instrument ...
+-- 仅在音译与完整输入码一致，且后面确实还有逗号分隔的释义时处理，
+-- 避免误删普通英文释义、缩写或专有名词。
+local function strip_redundant_romanization(def_str, input_code)
+    if not def_str or def_str == "" or not input_code or input_code == "" then
+        return def_str
+    end
+
+    local clean_def = def_str:gsub("\194\160", " ")
+    local normalized_input = input_code:lower():gsub("[^%a%d]", "")
+    if normalized_input == "" then return clean_def end
+
+    local romanization, remainder = clean_def:match("^%s*([%a][%a%'%-]*)%s*(.*)$")
+    if not romanization or romanization:lower():gsub("[^%a%d]", "") ~= normalized_input then
+        return clean_def
+    end
+
+    local definition = remainder:match("^%s*%b()%s*,%s*(.+)$")
+        or remainder:match("^%s*,%s*(.+)$")
+    return definition or clean_def
+end
+
 function M.init(env)
     local config = env.engine.schema.config
     local ns = env.name_space:gsub("^*", "")
@@ -196,6 +222,7 @@ function M.func(input, env)
             -- 中译英
             local clean_text = text:gsub("^%s+", ""):gsub("%s+$", "")
             raw_def = brief_glosses[clean_text] or lookup(env.cedict, clean_text)
+            raw_def = strip_redundant_romanization(raw_def, context.input)
             is_e2c = false
         end
 
