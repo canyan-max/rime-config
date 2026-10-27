@@ -129,6 +129,7 @@ patch:
     max_defs: 2                        # 日常简明模式：最多显示两条完整短释义
     max_length: 0                      # 0 表示不截断释义
     brief_length: 40                   # 合计超过此长度就不追加第二条，第一条始终完整
+    wrap_width: 34                     # 长英文优先在分号、逗号或完整单词边界折行一次
     comment_prefix: " "                # 释义与候选词之间的分隔
     comment_suffix: ""
 

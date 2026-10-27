@@ -168,6 +168,45 @@ local function strip_redundant_romanization(def_str, input_code)
     return definition or clean_def
 end
 
+-- 长释义只主动折行一次：优先选择语义边界，其次选择完整单词边界。
+-- 后半段保持完整，极长内容仍交给前端按照 max_width 自动换行。
+local function wrap_definition(def_str, wrap_width)
+    if not def_str or def_str == "" or not wrap_width or wrap_width <= 0 then
+        return def_str
+    end
+
+    local length = utf8.len(def_str)
+    if not length or length <= wrap_width then return def_str end
+
+    local byte_offset = utf8.offset(def_str, wrap_width + 1)
+    if not byte_offset then return def_str end
+
+    local head = def_str:sub(1, byte_offset - 1)
+    local minimum_break = math.floor(wrap_width * 0.45)
+    local break_at = head:match("^.*();%s+")
+    if break_at and break_at >= minimum_break then
+        local first = def_str:sub(1, break_at)
+        local rest = def_str:sub(break_at + 1):gsub("^%s+", "")
+        return first .. "\n" .. rest
+    end
+
+    break_at = head:match("^.*(),%s+")
+    if break_at and break_at >= minimum_break then
+        local first = def_str:sub(1, break_at)
+        local rest = def_str:sub(break_at + 1):gsub("^%s+", "")
+        return first .. "\n" .. rest
+    end
+
+    break_at = head:match("^.*()%s+")
+    if break_at then
+        local first = def_str:sub(1, break_at - 1)
+        local rest = def_str:sub(break_at + 1):gsub("^%s+", "")
+        return first .. "\n" .. rest
+    end
+
+    return def_str
+end
+
 function M.init(env)
     local config = env.engine.schema.config
     local ns = env.name_space:gsub("^*", "")
@@ -186,6 +225,8 @@ function M.init(env)
     env.max_length = config:get_int(ns .. "/max_length") or 45
     -- 只限制后续完整释义的追加；第一条即使很长也不从中间截断。
     env.brief_length = config:get_int(ns .. "/brief_length") or 40
+    -- 英文释义超过此字符数时智能折行一次；0 表示不主动折行。
+    env.wrap_width = config:get_int(ns .. "/wrap_width") or 0
 
     -- 释义前缀/后缀
     env.comment_prefix = config:get_string(ns .. "/comment_prefix") or " "
@@ -229,6 +270,9 @@ function M.func(input, env)
         if raw_def and raw_def ~= "" then
             local brief_length = not is_e2c and env.brief_length or nil
             local formatted_def = format_by_count(raw_def, env.max_defs, env.max_length, is_e2c, brief_length)
+            if not is_e2c then
+                formatted_def = wrap_definition(formatted_def, env.wrap_width)
+            end
             if formatted_def ~= "" then
                 local formatted = env.comment_prefix .. formatted_def .. env.comment_suffix
                 if cand.comment and cand.comment ~= "" then
