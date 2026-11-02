@@ -28,13 +28,16 @@ log_fail() {
 }
 
 find_business_yaml_files() {
+  # user.yaml 和 installation.yaml 是 Rime 自动生成的本机状态文件，
+  # 已被 Git 忽略，不纳入仓库配置的格式检查。
   (
     cd "${REPO_ROOT}"
     {
       find . \
         \( -path "./.git" -o -path "./.git/*" -o -path "./.github" -o -path "./.github/*" -o -path "./others" -o -path "./others/*" \) -prune \
         -o \
-        \( -maxdepth 1 -type f \( -name "*.yaml" -o -name "*.yml" \) ! -name "*.dict.yaml" -print \)
+        \( -maxdepth 1 -type f \( -name "*.yaml" -o -name "*.yml" \) \
+          ! -name "*.dict.yaml" ! -name "user.yaml" ! -name "installation.yaml" -print \)
       find ./others/no_lua_schema \
         -maxdepth 1 -type f \( -name "*.yaml" -o -name "*.yml" \) ! -name "*.dict.yaml" -print
     }

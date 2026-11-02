@@ -14,10 +14,10 @@ patch:
   #   true  = 横向候选栏
   style/horizontal: false
 
-  # 英文释义使用 Segoe UI 11pt，中文微软雅黑 UI 10pt，序号 10pt。
-  style/font_point: 10
-  style/label_font_point: 10
-  style/comment_font_point: 11
+  # 中文候选 11pt 为主体，英文释义 Segoe UI 10pt，序号 9pt。
+  style/font_point: 11
+  style/label_font_point: 9
+  style/comment_font_point: 10
   style/font_face: "Microsoft YaHei UI"
   style/label_font_face: "Microsoft YaHei UI"
   style/comment_font_face: "Segoe UI, Microsoft YaHei UI"
@@ -41,7 +41,7 @@ patch:
   "preset_color_schemes/mint_light/hilited_comment_text_color": 0x3300FF # #FF0033 当前释义
 
   # ─────────── 行高与间距 ───────────
-  # 行高设为字号的 100%，序号、中文与英文在每条候选行内垂直居中。
+  # 行高设为字号的 100%，序号、中文与释义垂直居中，避免小字号序号偏上。
   style/layout/linespacing: 100
   style/layout/align_type: center
 
@@ -53,14 +53,14 @@ patch:
   # 高亮区域上下内边距，缩小每行留白。
   style/layout/hilite_padding_y: 2
 
-  # 候选项之间的间距。
-  style/layout/candidate_spacing: 5
+  # 候选项之间适当留白，便于区分多行释义所属的条目。
+  style/layout/candidate_spacing: 8
 
   # 序号、候选文字和英文释义之间的横向间隔。
   style/layout/hilite_spacing: 6
 
   # 候选框整体的上下内边距。
-  style/layout/margin_y: 3
+  style/layout/margin_y: 6
 
   # ─────────── 在特定程序里强制英文模式 ───────────
   # 程序名一律用小写、带 .exe（Weasel 0.15 及更早必须小写，新版本不区分大小写，统一小写最稳）。
