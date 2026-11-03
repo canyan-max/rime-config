@@ -1,5 +1,6 @@
 -- 进制转换：hexFF、dec255、bin1010。
 -- 仅处理明确前缀；最多 64 位，使用逐位运算避免大整数精度损失。
+-- 十六进制输出按整字节补零，例如 dec5 → 0x05、dec256 → 0x0100。
 local M = {}
 local digits = "0123456789ABCDEF"
 local sources = {
@@ -69,11 +70,40 @@ function M.func(input, seg, _env)
   end
   for _, target in ipairs(targets) do
     if target.base ~= source.base then
-      local text = target.prefix .. convert(value, source.base, target.base)
+      local converted = convert(value, source.base, target.base)
+      if target.base == 16 and #converted % 2 ~= 0 then
+        converted = "0" .. converted
+      end
+      local text = target.prefix .. converted
       local cand = Candidate("base_conversion", seg.start, seg._end, text, target.comment)
       cand.quality = 100
       yield(cand)
+      if source.base == 10 and target.base == 16 then
+        local combined_text = convert(value, source.base, 10) .. ":" .. text
+        local combined_cand = Candidate(
+          "base_conversion",
+          seg.start,
+          seg._end,
+          combined_text,
+          "十进制:十六进制"
+        )
+        combined_cand.quality = 100
+        yield(combined_cand)
+      end
       if source.base == 16 and target.base == 10 then
+        local source_hex = value:upper()
+        if #source_hex % 2 ~= 0 then
+          source_hex = "0" .. source_hex
+        end
+        local combined_cand = Candidate(
+          "base_conversion",
+          seg.start,
+          seg._end,
+          "0x" .. source_hex .. ":" .. text,
+          "十六进制:十进制"
+        )
+        combined_cand.quality = 100
+        yield(combined_cand)
         local signed_text = signed_hex_to_decimal(value)
         if signed_text then
           local signed_comment = "有符号 " .. (#value * 4) .. " 位十进制（补码）"
